@@ -1,0 +1,27 @@
+MODULE IMPFUN4
+! This module calculates the required functions!!
+!-----------------------------------------------!
+! DC 06/01/2013                                 !
+
+CONTAINS
+SUBROUTINE AD(p1,p,q,s,gam1,gam,j,i1,i2,i3)
+USE kinds
+INTEGER,INTENT(IN)::j,i1,i2,i3
+INTEGER::j1
+REAL(dbl),INTENT(IN)::p(1:4,1:4),q(1:3),s,gam1(1:3),gam(1:4,1:4)
+REAL(dbl),INTENT(OUT)::p1
+
+IF (ABS(p(j,i1)).gt.10.0_dbl**(-6)) THEN
+    j1=MIN(i1+j-2,8-i1-j)
+    p1=SIGN(gam1(j1))*DLOG(ABS(p(j,i1)))*DLOG(((q(j)*(s+ABS(gam1(j1))))/ &
+       (q(j)-p(j,i1)))**2*(ABS(gam(i2,i1))+s)*(ABS(i3,i1)+s)/((ABS(gam(i1,j))+s)* &
+       (ABS(gam(i1,i1))+s)*(ABS(gam(i2,i3))+s)*(ABS(i3,i2)+s)))
+ELSE
+    p1=0.0_dbl
+END IF
+
+!Debug
+WRITE(*,*)"p1 coming from AD subroutine",p1
+
+END SUBROUTINE
+
